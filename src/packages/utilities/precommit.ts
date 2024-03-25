@@ -12,9 +12,7 @@ const checkGit = async (answers: TAnswers) => {
     "ls -a"
   )) as unknown as string;
 
-  if (result.includes(".gitignore")) {
-    result = result.replace(".gitignore", "");
-  }
+  result = result.replace(".gitignore", "");
 
   return result.includes(".git");
 };
@@ -78,7 +76,7 @@ export const createPrecommitConfiguration = async (answers: TAnswers) => {
     await execCommandOnProject(answers)("git init");
   }
 
-  const loadingSpinner = spinner("Creating husky configuration\n").start();
+  const loadingSpinner = spinner("Creating pre-commit configuration\n").start();
 
   await execCommandOnProject(answers)(
     commandsInstallLiteral[answers.packageManager]
@@ -123,4 +121,6 @@ export const createPrecommitConfiguration = async (answers: TAnswers) => {
   );
 
   loadingSpinner.stop();
+
+  log("Pre-commit configuration created successfully!");
 };

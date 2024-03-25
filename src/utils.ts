@@ -4,7 +4,11 @@ import { TAnswers } from "./types.js";
 
 export const log = console.log;
 
-export const projectOptions = ["🚧 react", "✅ next.js", "✅ @angular"];
+export const projectOptions = [
+  // "react",
+  "next.js",
+  "@angular",
+];
 export const packageManagerOptions = ["npm", "yarn", "pnpm"];
 
 export const spinner = (message: string) => ora(message);
@@ -24,7 +28,7 @@ export const execCommand = async (command: string) =>
 
 export const execCommandOnProject =
   (answers: TAnswers) => async (command: string) =>
-    await execCommand(`cd ${answers.projectName} && ${command}`);
+    await execCommand(`cd ./${answers.projectName} && ${command}`);
 
 export const commandInstallPackageLiteral = {
   pnpm: "pnpm add",

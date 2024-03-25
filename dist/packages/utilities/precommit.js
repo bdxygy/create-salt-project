@@ -1,9 +1,7 @@
 import { commandInstallPackageLiteral, execCommandOnProject, log, spinner, } from "../../utils.js";
 const checkGit = async (answers) => {
     let result = (await execCommandOnProject(answers)("ls -a"));
-    if (result.includes(".gitignore")) {
-        result = result.replace(".gitignore", "");
-    }
+    result = result.replace(".gitignore", "");
     return result.includes(".git");
 };
 const createSaltPrecommit = async (answers, packageJson) => {
@@ -49,7 +47,7 @@ export const createPrecommitConfiguration = async (answers) => {
         log("Git not found! Initializing git...");
         await execCommandOnProject(answers)("git init");
     }
-    const loadingSpinner = spinner("Creating husky configuration\n").start();
+    const loadingSpinner = spinner("Creating pre-commit configuration\n").start();
     await execCommandOnProject(answers)(commandsInstallLiteral[answers.packageManager]);
     let packageJsonString = (await execCommandOnProject(answers)("cat package.json"));
     let packageJsonObject = JSON.parse(packageJsonString);
@@ -68,5 +66,6 @@ export const createPrecommitConfiguration = async (answers) => {
     await createSaltPrecommit(answers, packageJsonObject);
     await execCommandOnProject(answers)(`echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`);
     loadingSpinner.stop();
+    log("Pre-commit configuration created successfully!");
 };
 //# sourceMappingURL=precommit.js.map
