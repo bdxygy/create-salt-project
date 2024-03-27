@@ -55,6 +55,10 @@ export class NextProject extends BaseProject {
         this.answers = answers;
         this.eslintConfiguration.extends.push("next/core-web-vitals");
         this.fileStylesPath = "./src/styles/globals.scss";
+        this.commanInstallLinterLiteral.npm +=
+            "npm i --save-dev eslint-config-next";
+        this.commanInstallLinterLiteral.yarn += "yarn add --dev eslint-config-next";
+        this.commanInstallLinterLiteral.pnpm += "pnpm add -D eslint-config-next";
     }
     async createProject() {
         let commandString = `npx create-next-app@latest ${this.answers.projectName} --no-eslint --ts --use-${this.answers.packageManager} --src-dir --no-tailwind`;

@@ -69,8 +69,15 @@ export class NextProject extends BaseProject {
   };
   constructor(protected answers: TAnswers) {
     super(answers);
+
     this.eslintConfiguration.extends.push("next/core-web-vitals");
+
     this.fileStylesPath = "./src/styles/globals.scss";
+
+    this.commanInstallLinterLiteral.npm +=
+      "npm i --save-dev eslint-config-next";
+    this.commanInstallLinterLiteral.yarn += "yarn add --dev eslint-config-next";
+    this.commanInstallLinterLiteral.pnpm += "pnpm add -D eslint-config-next";
   }
 
   async createProject(): Promise<void> {
