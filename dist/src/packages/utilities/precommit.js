@@ -59,7 +59,7 @@ export const createPrecommitConfiguration = async (answers) => {
     }
     await execCommandOnProject(answers)(`echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`);
     await execCommandOnProject(answers)(commandConfigLiteral[answers.packageManager]);
-    const commitMessage = `echo "🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
+    const commitMessage = `echo "\n🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
     await execCommandOnProject(answers)(`echo ${JSON.stringify(commitMessage)} > .husky/pre-commit`);
     packageJsonString = (await execCommandOnProject(answers)("cat package.json"));
     packageJsonObject = JSON.parse(packageJsonString);

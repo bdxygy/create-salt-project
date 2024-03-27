@@ -101,7 +101,7 @@ export const createPrecommitConfiguration = async (answers: TAnswers) => {
     commandConfigLiteral[answers.packageManager]
   );
 
-  const commitMessage = `echo "🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
+  const commitMessage = `echo "\n🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
 
   await execCommandOnProject(answers)(
     `echo ${JSON.stringify(commitMessage)} > .husky/pre-commit`
