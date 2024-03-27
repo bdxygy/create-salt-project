@@ -109,7 +109,7 @@ export class NextProject extends BaseProject {
      */
 
     await execCommandOnProject(this.answers)(
-      `echo "import '@/styles/globals.scss';
+      `echo "import '@${this.answers.projectName}/styles/globals.scss';
       import type { AppProps } from 'next/app';
       
       export default function App({ Component, pageProps }: AppProps) {

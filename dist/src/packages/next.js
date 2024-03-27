@@ -74,7 +74,7 @@ export class NextProject extends BaseProject {
         /**
          * Update App.tsx
          */
-        await execCommandOnProject(this.answers)(`echo "import '@/styles/globals.scss';
+        await execCommandOnProject(this.answers)(`echo "import '@${this.answers.projectName}/styles/globals.scss';
       import type { AppProps } from 'next/app';
       
       export default function App({ Component, pageProps }: AppProps) {
