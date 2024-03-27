@@ -1,61 +1,128 @@
 import { TAnswers } from "../types.js";
 import { execCommand, execCommandOnProject, spinner } from "../utils.js";
+import { BaseProject } from "./base.js";
 
-const commandInstallScssLiteral = {
-  pnpm: "pnpm add -D sass@latest",
-  npm: "npm install -D sass@latest",
-  yarn: "yarn add -D sass@latest",
-};
+// const commandInstallScssLiteral = {
+//   pnpm: "pnpm add -D sass@latest",
+//   npm: "npm install -D sass@latest",
+//   yarn: "yarn add -D sass@latest",
+// };
 
-export const createNextProject = async (answers: TAnswers) => {
-  let commandString = `npx create-next-app@latest ${answers.projectName} --no-eslint --ts --use-${answers.packageManager} --src-dir --no-tailwind`;
+// export const createNextProject = async (answers: TAnswers) => {
+//   let commandString = `npx create-next-app@latest ${answers.projectName} --no-eslint --ts --use-${answers.packageManager} --src-dir --no-tailwind`;
 
-  commandString += ` --import-alias "@${answers.projectName}/*"`;
+//   commandString += ` --import-alias "@${answers.projectName}/*"`;
 
-  commandString += " --no-app";
+//   commandString += " --no-app";
 
-  const loadingSpinner = spinner(
-    "Please wait, initializing your project...\n"
-  ).start();
+//   const loadingSpinner = spinner(
+//     "Please wait, initializing your project...\n"
+//   ).start();
 
-  await execCommand(commandString);
+//   await execCommand(commandString);
 
-  loadingSpinner.stop();
+//   loadingSpinner.stop();
 
-  await execCommandOnProject(answers)(
-    `mv ./src/styles/globals.css ./src/styles/globals.scss`
-  );
+//   await execCommandOnProject(answers)(
+//     `mv ./src/styles/globals.css ./src/styles/globals.scss`
+//   );
 
-  await execCommandOnProject(answers)(`rm src/styles/Home.module.css`);
+//   await execCommandOnProject(answers)(`rm src/styles/Home.module.css`);
 
-  /**
-   * Update index.tsx
-   */
+//   /**
+//    * Update index.tsx
+//    */
 
-  await execCommandOnProject(answers)(
-    `echo "export default function Home() {
-      return <h1>Hello Salters!</h1>;
-    }" > src/pages/index.tsx`
-  );
+//   await execCommandOnProject(answers)(
+//     `echo "export default function Home() {
+//       return <h1>Hello Salters!</h1>;
+//     }" > src/pages/index.tsx`
+//   );
 
-  /**
-   * Update App.tsx
-   */
+//   /**
+//    * Update App.tsx
+//    */
 
-  await execCommandOnProject(answers)(
-    `echo "import '@/styles/globals.scss';
-    import type { AppProps } from 'next/app';
-    
-    export default function App({ Component, pageProps }: AppProps) {
-      return <Component {...pageProps} />;
-    }" > src/pages/_app.tsx`
-  );
+//   await execCommandOnProject(answers)(
+//     `echo "import '@/styles/globals.scss';
+//     import type { AppProps } from 'next/app';
 
-  /**
-   * Install sass
-   */
+//     export default function App({ Component, pageProps }: AppProps) {
+//       return <Component {...pageProps} />;
+//     }" > src/pages/_app.tsx`
+//   );
 
-  await execCommandOnProject(answers)(
-    `${commandInstallScssLiteral[answers.packageManager]}`
-  );
-};
+//   /**
+//    * Install sass
+//    */
+
+//   await execCommandOnProject(answers)(
+//     `${commandInstallScssLiteral[answers.packageManager]}`
+//   );
+// };
+
+export class NextProject extends BaseProject {
+  private commandInstallScssLiteral = {
+    pnpm: "pnpm add -D sass@latest",
+    npm: "npm install -D sass@latest",
+    yarn: "yarn add -D sass@latest",
+  };
+  constructor(protected answers: TAnswers) {
+    super(answers);
+    this.eslintConfiguration.extends.push("next/core-web-vitals");
+    this.fileStylesPath = "./src/styles/globals.scss";
+  }
+
+  async createProject(): Promise<void> {
+    let commandString = `npx create-next-app@latest ${this.answers.projectName} --no-eslint --ts --use-${this.answers.packageManager} --src-dir --no-tailwind`;
+
+    commandString += ` --import-alias "@${this.answers.projectName}/*"`;
+
+    commandString += " --no-app";
+
+    const loadingSpinner = spinner(
+      "Please wait, initializing your project...\n"
+    ).start();
+
+    await execCommand(commandString);
+
+    loadingSpinner.stop();
+
+    await execCommandOnProject(this.answers)(
+      `mv ./src/styles/globals.css ./src/styles/globals.scss`
+    );
+
+    await execCommandOnProject(this.answers)(`rm src/styles/Home.module.css`);
+
+    /**
+     * Update index.tsx
+     */
+
+    await execCommandOnProject(this.answers)(
+      `echo "export default function Home() {
+        return <h1>Hello Salters!</h1>;
+      }" > src/pages/index.tsx`
+    );
+
+    /**
+     * Update App.tsx
+     */
+
+    await execCommandOnProject(this.answers)(
+      `echo "import '@/styles/globals.scss';
+      import type { AppProps } from 'next/app';
+      
+      export default function App({ Component, pageProps }: AppProps) {
+        return <Component {...pageProps} />;
+      }" > src/pages/_app.tsx`
+    );
+
+    /**
+     * Install sass
+     */
+
+    await execCommandOnProject(this.answers)(
+      `${this.commandInstallScssLiteral[this.answers.packageManager]}`
+    );
+  }
+}

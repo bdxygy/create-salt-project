@@ -5,6 +5,11 @@ export declare const log: {
 };
 export declare const projectOptions: string[];
 export declare const packageManagerOptions: string[];
+export declare const commandRun: {
+    pnpm: string;
+    npm: string;
+    yarn: string;
+};
 export declare const spinner: (message: string) => import("ora").Ora;
 export declare const execCommand: (command: string) => Promise<unknown>;
 export declare const execCommandOnProject: (answers: TAnswers) => (command: string) => Promise<unknown>;

@@ -5,14 +5,11 @@ import inquirer from "inquirer";
 import { TAnswers } from "./types.js";
 import chalk from "chalk";
 import { log } from "./utils.js";
-import { createLinterConfiguration } from "./packages/utilities/linter.js";
-import { createPrecommitConfiguration } from "./packages/utilities/precommit.js";
-import { createProjectConfiguration } from "./packages/index.js";
-import { createFormatterConfiguration } from "./packages/utilities/formatter.js";
-import { createTailwindConfig } from "./packages/utilities/tailwind-config.js";
 import figlet from "figlet";
-import { error } from "console";
-import packageJson from "../package.json" with { type: "json" };
+import packageJson from "../package.json" assert { type: "json" };
+import { BaseProjectI } from "./packages/base.js";
+import { NextProject } from "./packages/next.js";
+import { AngularProject } from "./packages/angular.js";
 
 figlet("Hello Salters!", async (err, data) => {
   if (err)
@@ -22,15 +19,17 @@ figlet("Hello Salters!", async (err, data) => {
 
   log(`${chalk.bold.cyan(data)} V${packageJson.version}\n`);
 
+  let project: BaseProjectI;
+
   const answers: TAnswers = await inquirer.prompt(questions);
 
-  await createProjectConfiguration(answers);
+  if (answers.projectFramework === "next.js") {
+    project = new NextProject(answers);
+  }
 
-  await createPrecommitConfiguration(answers);
+  if (answers.projectFramework === "@angular") {
+    project = new AngularProject(answers);
+  }
 
-  await createTailwindConfig(answers);
-
-  await createLinterConfiguration(answers);
-
-  await createFormatterConfiguration(answers);
+  await project.run();
 });

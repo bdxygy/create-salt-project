@@ -1,2 +1,7 @@
 import { TAnswers } from "../types.js";
-export declare const createAngularProject: (answers: TAnswers) => Promise<void>;
+import { BaseProject } from "./base.js";
+export declare class AngularProject extends BaseProject {
+    protected answers: TAnswers;
+    constructor(answers: TAnswers);
+    createProject(): Promise<void>;
+}

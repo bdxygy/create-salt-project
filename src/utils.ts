@@ -11,6 +11,12 @@ export const projectOptions = [
 ];
 export const packageManagerOptions = ["npm", "yarn", "pnpm"];
 
+export const commandRun = {
+  pnpm: "pnpm",
+  npm: "npm run",
+  yarn: "yarn",
+};
+
 export const spinner = (message: string) => ora(message);
 
 export const execCommand = async (command: string) =>
