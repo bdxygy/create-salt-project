@@ -1,1 +1,0 @@
-{"version":3,"file":"angular.js","sourceRoot":"","sources":["../../src/packages/angular.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,WAAW,EAAgB,MAAM,aAAa,CAAC;AAExD,MAAM,CAAC,MAAM,oBAAoB,GAAG,KAAK,EAAE,OAAiB,EAAE,EAAE;IAC9D,MAAM,WAAW,CACf,qCAAqC,OAAO,CAAC,WAAW,8DAA8D,OAAO,CAAC,cAAc,EAAE,CAC/I,CAAC;AACJ,CAAC,CAAC"}

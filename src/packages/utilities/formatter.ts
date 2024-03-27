@@ -1,5 +1,6 @@
 import { TAnswers } from "../../types.js";
 import { execCommandOnProject, log, spinner } from "../../utils.js";
+import { commandRun } from "./command-run.js";
 
 const commandInstallFormatterLiteral = {
   pnpm: "pnpm add --save-dev --save-exact prettier && pnpm add -D @ianvs/prettier-plugin-sort-imports && pnpm add -g prettier",
@@ -24,8 +25,6 @@ export const createFormatterConfiguration = async (answers: TAnswers) => {
     "Creating formatter configuration...\n"
   ).start();
 
-  loadingSpinner.stop();
-
   await execCommandOnProject(answers)(
     `${commandInstallFormatterLiteral[answers.packageManager]}`
   );
@@ -49,7 +48,11 @@ export const createFormatterConfiguration = async (answers: TAnswers) => {
     `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
   );
 
-  await execCommandOnProject(answers)(`${answers.packageManager} run format`);
+  await execCommandOnProject(answers)(
+    `${commandRun[answers.packageManager]} format`
+  );
 
-  log("Formatter configuration created successfully!");
+  loadingSpinner.stop();
+
+  log("✔ Formatter configuration created successfully!");
 };

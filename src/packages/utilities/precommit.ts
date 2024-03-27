@@ -1,7 +1,6 @@
 import { TAnswers } from "../../types.js";
 import {
   commandInstallPackageLiteral,
-  execCommand,
   execCommandOnProject,
   log,
   spinner,
@@ -102,7 +101,7 @@ export const createPrecommitConfiguration = async (answers: TAnswers) => {
     commandConfigLiteral[answers.packageManager]
   );
 
-  const commitMessage = `echo "Precommit Running!"`;
+  const commitMessage = `echo "🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
 
   await execCommandOnProject(answers)(
     `echo ${JSON.stringify(commitMessage)} > .husky/pre-commit`
@@ -122,5 +121,5 @@ export const createPrecommitConfiguration = async (answers: TAnswers) => {
 
   loadingSpinner.stop();
 
-  log("Pre-commit configuration created successfully!");
+  log("✔ Pre-commit configuration created successfully!");
 };

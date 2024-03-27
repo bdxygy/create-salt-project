@@ -20,6 +20,7 @@ const eslintConfiguration = {
     "coverage/**",
     "test/**",
     ".next/**",
+    "**/*.json",
   ],
   rules: {
     "@typescript-eslint/no-empty-function": "error",
@@ -74,10 +75,15 @@ const eslintConfiguration = {
   },
 };
 
+const lintStagedConfiguration = (answers: TAnswers) => `module.exports = {
+  '**/*.{js,jsx,ts,tsx}': ['prettier --write', 'eslint --fix'],
+  '**/*.{html,css,scss,json}': ['prettier --write'],
+}`;
+
 const commanInstallLinterLiteral = {
-  npm: "npm install -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser",
-  yarn: "yarn add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser",
-  pnpm: "pnpm add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser",
+  npm: "npm install -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && npm i -g eslint",
+  yarn: "yarn add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && yarn add -g eslint",
+  pnpm: "pnpm add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && pnpm add -g eslint",
 };
 
 export const createLinterConfiguration = async (answers: TAnswers) => {
@@ -87,10 +93,18 @@ export const createLinterConfiguration = async (answers: TAnswers) => {
     `${commanInstallLinterLiteral[answers.packageManager]}`
   );
 
+  if (answers.projectFramework === "next.js") {
+    eslintConfiguration.extends.push("next/core-web-vitals");
+  }
+
   await execCommandOnProject(answers)(
     `echo "${JSON.stringify(
       JSON.stringify(eslintConfiguration)
     )}" > .eslintrc.json`
+  );
+
+  const response = await execCommandOnProject(answers)(
+    `echo "${lintStagedConfiguration(answers)}" > .lintstagedrc.js`
   );
 
   const packageJson = JSON.parse(
@@ -106,5 +120,5 @@ export const createLinterConfiguration = async (answers: TAnswers) => {
   );
 
   loadingSpinner.stop();
-  log("Linter configuration created successfully!");
+  log("✔ Linter configuration created successfully!");
 };

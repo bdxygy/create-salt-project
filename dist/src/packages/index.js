@@ -18,6 +18,6 @@ export const createProjectConfiguration = async (answers) => {
             angularSpinner.stop();
             break;
     }
-    log("Project created successfully!");
+    log("✔ Project created successfully!");
 };
 //# sourceMappingURL=index.js.map

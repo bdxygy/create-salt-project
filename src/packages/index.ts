@@ -1,5 +1,5 @@
 import { TAnswers } from "../types.js";
-import { execCommand, log, spinner } from "../utils.js";
+import { log, spinner } from "../utils.js";
 import { createAngularProject } from "./angular.js";
 import { createNextProject } from "./next.js";
 import { createReactProject } from "./react.js";
@@ -25,5 +25,5 @@ export const createProjectConfiguration = async (answers: TAnswers) => {
       break;
   }
 
-  log("Project created successfully!");
+  log("✔ Project created successfully!");
 };
