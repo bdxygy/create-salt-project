@@ -1,6 +1,6 @@
 {
     "name": "create-salt-project",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "",
     "bin": {
         "create-salt-project": "./dist/src/index.js"
@@ -9,7 +9,7 @@
     "type": "module",
     "scripts": {
         "dev": "rm -rf dist && tsc -w",
-        "link-cli": "rm -rf /home/budi/.local/share/pnpm/global/5 && pnpm link --global && cp package.json dist/package.json",
+        "link-cli": "  && pnpm link --global && cp package.json dist/package.json",
         "publish-cli": "pnpm version patch && pnpm publish --access public"
     },
     "keywords": [],
