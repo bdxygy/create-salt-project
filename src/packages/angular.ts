@@ -24,7 +24,6 @@ export class AngularProject extends BaseProject {
     );
 
     angularSpinner.stop();
-
     log("✔ Project created successfully!");
   }
 

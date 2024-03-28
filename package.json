@@ -4,8 +4,7 @@
   "description": "",
   "bin": {
     "create-salt-project": "./dist/src/index.js",
-    "salt-project": "./dist/src/index.js",
-    "salt -p": "./dist/src/index.js"
+    "salt-project": "./dist/src/index.js"
   },
   "main": "./dist/src/index.js",
   "type": "module",
