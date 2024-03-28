@@ -2,7 +2,6 @@ import { exec } from "child_process";
 import ora from "ora";
 export const log = console.log;
 export const projectOptions = [
-    // "react",
     "next.js",
     "@angular",
 ];
@@ -32,4 +31,3 @@ export const commandInstallPackageLiteral = {
     npm: "npm install",
     yarn: "yarn add",
 };
-//# sourceMappingURL=utils.js.map

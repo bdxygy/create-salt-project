@@ -5,4 +5,5 @@ export declare class NextProject extends BaseProject {
     private commandInstallScssLiteral;
     constructor(answers: TAnswers);
     createProject(): Promise<void>;
+    createPagesRouterProject(): Promise<void>;
 }

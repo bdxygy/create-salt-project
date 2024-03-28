@@ -4,4 +4,5 @@ export declare class AngularProject extends BaseProject {
     protected answers: TAnswers;
     constructor(answers: TAnswers);
     createProject(): Promise<void>;
+    createTesting(): Promise<void>;
 }

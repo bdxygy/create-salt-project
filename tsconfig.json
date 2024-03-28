@@ -2,12 +2,13 @@
   "compilerOptions": {
     "module": "NodeNext",
     "target": "ESNext",
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "./dist",
     "noImplicitAny": true,
-    "declaration": true,
+    "declaration": false,
     "moduleResolution": "NodeNext",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "removeComments": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

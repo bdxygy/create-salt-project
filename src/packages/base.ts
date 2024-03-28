@@ -14,6 +14,8 @@ export interface BaseProjectI {
   createFormatter(): Promise<void>;
   createTailwind(): Promise<void>;
   createPrecommit(): Promise<void>;
+  createTesting(): Promise<void>;
+  finishing(): Promise<void>;
 }
 
 export class BaseProject implements BaseProjectI {
@@ -335,24 +337,38 @@ export class BaseProject implements BaseProjectI {
   };
 
   constructor(protected answers: TAnswers) {}
+  async createTesting(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   async run(): Promise<void> {
-    // await createProjectConfiguration(answers);
     await this.createProject();
 
-    //   await createPrecommitConfiguration(answers);
     await this.createPrecommit();
 
-    //   await createTailwindConfig(answers);
     await this.createTailwind();
 
-    //   await createLinterConfiguration(answers);
+    await this.createTesting();
+
     await this.createLinter();
 
-    //   await createFormatterConfiguration(answers);
     await this.createFormatter();
+
+    await this.finishing();
+  }
+  async finishing(): Promise<void> {
+    const loadingSpinner = spinner("Finishing setup project...\n").start();
+
+    await execCommandOnProject(this.answers)(
+      `${commandRun[this.answers.packageManager]} format && ${
+        commandRun[this.answers.packageManager]
+      } lintfix`
+    );
+
+    loadingSpinner.stop();
+    log("✔ Project setup created successfully!");
   }
 
-  createProject(): Promise<void> {
+  async createProject(): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
@@ -382,6 +398,7 @@ export class BaseProject implements BaseProjectI {
     );
 
     packageJson.scripts.lint = "eslint .";
+    packageJson.scripts.lintfix = "eslint . --fix";
 
     await execCommandOnProject(this.answers)(
       `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
@@ -417,10 +434,6 @@ export class BaseProject implements BaseProjectI {
 
     await execCommandOnProject(this.answers)(
       `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
-    );
-
-    await execCommandOnProject(this.answers)(
-      `${commandRun[this.answers.packageManager]} format`
     );
 
     loadingSpinner.stop();

@@ -7,9 +7,12 @@ import chalk from "chalk";
 import { log } from "./utils.js";
 import figlet from "figlet";
 import packageJson from "../package.json" assert { type: "json" };
-import { BaseProjectI } from "./packages/base.js";
 import { NextProject } from "./packages/next.js";
 import { AngularProject } from "./packages/angular.js";
+
+interface ProjectRunner {
+  run(): Promise<void>;
+}
 
 figlet("Hello Salters!", async (err, data) => {
   if (err)
@@ -19,7 +22,7 @@ figlet("Hello Salters!", async (err, data) => {
 
   log(`${chalk.bold.cyan(data)} V${packageJson.version}\n`);
 
-  let project: BaseProjectI;
+  let project: ProjectRunner;
 
   const answers: TAnswers = await inquirer.prompt(questions);
 

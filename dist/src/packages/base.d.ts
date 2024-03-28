@@ -6,6 +6,7 @@ export interface BaseProjectI {
     createFormatter(): Promise<void>;
     createTailwind(): Promise<void>;
     createPrecommit(): Promise<void>;
+    createTesting(): Promise<void>;
 }
 export declare class BaseProject implements BaseProjectI {
     protected answers: TAnswers;
@@ -110,6 +111,7 @@ export declare class BaseProject implements BaseProjectI {
         yarn: string;
     };
     constructor(answers: TAnswers);
+    createTesting(): Promise<void>;
     run(): Promise<void>;
     createProject(): Promise<void>;
     createLinter(): Promise<void>;

@@ -21,4 +21,3 @@ figlet("Hello Salters!", async (err, data) => {
     }
     await project.run();
 });
-//# sourceMappingURL=index.js.map

@@ -94,9 +94,7 @@ export class BaseProject {
         singleQuote: true,
         semi: true,
         bracketSameLine: true,
-        // Since prettier 3.0, manually specifying plugins is required
         plugins: ["@ianvs/prettier-plugin-sort-imports"],
-        // This plugin's options
         importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
     };
     tailwindConfigString = `module.exports = {
@@ -298,19 +296,25 @@ export class BaseProject {
     constructor(answers) {
         this.answers = answers;
     }
-    async run() {
-        // await createProjectConfiguration(answers);
-        await this.createProject();
-        //   await createPrecommitConfiguration(answers);
-        await this.createPrecommit();
-        //   await createTailwindConfig(answers);
-        await this.createTailwind();
-        //   await createLinterConfiguration(answers);
-        await this.createLinter();
-        //   await createFormatterConfiguration(answers);
-        await this.createFormatter();
+    async createTesting() {
+        throw new Error("Method not implemented.");
     }
-    createProject() {
+    async run() {
+        await this.createProject();
+        await this.createPrecommit();
+        await this.createTailwind();
+        await this.createTesting();
+        await this.createLinter();
+        await this.createFormatter();
+        await this.finishing();
+    }
+    async finishing() {
+        const loadingSpinner = spinner("Finishing setup project...\n").start();
+        await execCommandOnProject(this.answers)(`${commandRun[this.answers.packageManager]} format && ${commandRun[this.answers.packageManager]} lintfix`);
+        loadingSpinner.stop();
+        log("✔ Project setup created successfully!");
+    }
+    async createProject() {
         throw new Error("Method not implemented.");
     }
     async createLinter() {
@@ -320,6 +324,7 @@ export class BaseProject {
         await execCommandOnProject(this.answers)(`echo "${this.lintStagedConfiguration}" > .lintstagedrc.js`);
         const packageJson = JSON.parse((await execCommandOnProject(this.answers)("cat package.json")));
         packageJson.scripts.lint = "eslint .";
+        packageJson.scripts.lintfix = "eslint . --fix";
         await execCommandOnProject(this.answers)(`echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`);
         loadingSpinner.stop();
         log("✔ Linter configuration created successfully!");
@@ -332,7 +337,6 @@ export class BaseProject {
         packageJson.scripts.format =
             'prettier --write "./**/*.{js,jsx,ts,tsx,css,scss,md,json}" .';
         await execCommandOnProject(this.answers)(`echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`);
-        await execCommandOnProject(this.answers)(`${commandRun[this.answers.packageManager]} format`);
         loadingSpinner.stop();
         log("✔ Formatter configuration created successfully!");
     }
@@ -373,4 +377,3 @@ export class BaseProject {
         log("✔ Pre-commit configuration created successfully!");
     }
 }
-//# sourceMappingURL=base.js.map

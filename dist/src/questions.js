@@ -25,4 +25,3 @@ export const questions = [
         default: "SALT",
     },
 ];
-//# sourceMappingURL=questions.js.map
