@@ -1,9 +1,11 @@
 {
     "name": "create-salt-project",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "",
     "bin": {
-        "create-salt-project": "./dist/src/index.js"
+        "create-salt-project": "./dist/src/index.js",
+        "salt-project": "./dist/src/index.js",
+        "salt -p": "./dist/src/index.js"
     },
     "main": "./dist/src/index.js",
     "type": "module",
