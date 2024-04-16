@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "rm -rf dist && tsc -w",
-    "link-cli": "  && pnpm link --global && cp package.json dist/package.json",
+    "link-cli": "pnpm link --global && cp package.json dist/package.json",
     "publish-cli": "pnpm version patch && cp package.json dist/package.json && pnpm publish --access public --no-git-checks"
   },
   "keywords": [],

@@ -8,8 +8,11 @@ export class AngularProject extends BaseProject {
         this.fileStylesPath = "./src/styles.scss";
     }
     async createProject() {
-        const angularSpinner = spinner("Please wait, initializing your project...\n").start();
-        await execCommand(`npx -p @angular/cli@latest ng new ${this.answers.projectName} --style scss --routing true --ssr false --package-manager ${this.answers.packageManager}`);
+        const angularSpinner = spinner("Please wait, initializing your project...\n")
+            .start()
+            .stop();
+        const commandInstall = `npx -p @angular/cli@latest ng new ${this.answers.projectName} --style scss --routing true --ssr false --package-manager ${this.answers.packageManager}`;
+        await execCommand(commandInstall);
         await execCommandOnProject(this.answers)(`echo "<div className='flex w-screen h-screen items-center justify-center'>
             <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
           </div>" > src/app/app.component.html`);
