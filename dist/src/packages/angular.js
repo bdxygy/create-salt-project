@@ -8,9 +8,7 @@ export class AngularProject extends BaseProject {
         this.fileStylesPath = "./src/styles.scss";
     }
     async createProject() {
-        const angularSpinner = spinner("Please wait, initializing your project...\n")
-            .start()
-            .stop();
+        const angularSpinner = spinner("Please wait, initializing your project...\n").start();
         const commandInstall = `npx -p @angular/cli@latest ng new ${this.answers.projectName} --style scss --routing true --ssr false --package-manager ${this.answers.packageManager}`;
         await execCommand(commandInstall);
         await execCommandOnProject(this.answers)(`echo "<div className='flex w-screen h-screen items-center justify-center'>

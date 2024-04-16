@@ -11,9 +11,7 @@ export class AngularProject extends BaseProject {
   async createProject() {
     const angularSpinner = spinner(
       "Please wait, initializing your project...\n"
-    )
-      .start()
-      .stop();
+    ).start();
 
     const commandInstall = `npx -p @angular/cli@latest ng new ${this.answers.projectName} --style scss --routing true --ssr false --package-manager ${this.answers.packageManager}`;
 
