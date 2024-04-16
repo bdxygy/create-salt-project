@@ -3,6 +3,7 @@ import { commandInstallPackageLiteral, commandRun, execCommandOnProject, spinner
 export class BaseProject {
     answers;
     fileStylesPath = "./src/styles.scss";
+    corePath = "./src";
     eslintConfiguration = {
         env: {
             browser: true,
@@ -296,6 +297,12 @@ export class BaseProject {
     constructor(answers) {
         this.answers = answers;
     }
+    async createCleanArchitecture() {
+        const loadingSpinner = spinner("Creating clean architecture...\n");
+        await execCommandOnProject(this.answers)(`cd ${this.corePath} && mkdir core && cd core && mkdir entities utils services usecases libs && cd entities && mkdir domains dtos presenters`);
+        loadingSpinner.stop();
+        log("✔ Clean architecture created successfully!");
+    }
     async createTesting() {
         throw new Error("Method not implemented.");
     }
@@ -306,6 +313,7 @@ export class BaseProject {
         await this.createTesting();
         await this.createLinter();
         await this.createFormatter();
+        await this.createCleanArchitecture();
         await this.finishing();
     }
     async finishing() {

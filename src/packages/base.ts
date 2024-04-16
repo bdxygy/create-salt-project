@@ -15,11 +15,13 @@ export interface BaseProjectI {
   createTailwind(): Promise<void>;
   createPrecommit(): Promise<void>;
   createTesting(): Promise<void>;
+  createCleanArchitecture(): Promise<void>;
   finishing(): Promise<void>;
 }
 
 export class BaseProject implements BaseProjectI {
   protected fileStylesPath: string = "./src/styles.scss";
+  protected corePath: string = "./src";
 
   protected eslintConfiguration = {
     env: {
@@ -337,6 +339,16 @@ export class BaseProject implements BaseProjectI {
   };
 
   constructor(protected answers: TAnswers) {}
+  async createCleanArchitecture(): Promise<void> {
+    const loadingSpinner = spinner("Creating clean architecture...\n");
+
+    await execCommandOnProject(this.answers)(
+      `cd ${this.corePath} && mkdir core && cd core && mkdir entities utils services usecases libs && cd entities && mkdir domains dtos presenters`
+    );
+
+    loadingSpinner.stop();
+    log("✔ Clean architecture created successfully!");
+  }
   async createTesting(): Promise<void> {
     throw new Error("Method not implemented.");
   }
@@ -352,6 +364,8 @@ export class BaseProject implements BaseProjectI {
     await this.createLinter();
 
     await this.createFormatter();
+
+    await this.createCleanArchitecture();
 
     await this.finishing();
   }
