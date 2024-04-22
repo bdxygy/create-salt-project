@@ -103,9 +103,9 @@ export class BaseProject implements BaseProjectI {
   };`;
 
   protected commanInstallLinterLiteral = {
-    npm: "npm install -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && npm i -g eslint",
-    yarn: "yarn add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && yarn add -g eslint",
-    pnpm: "pnpm add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && pnpm add -g eslint",
+    npm: "npm install -D eslint@8.57.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser && npm i -g eslint@8.57.0",
+    yarn: "yarn add -D eslint@8.57.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser && yarn add -g eslint@8.57.0",
+    pnpm: "pnpm add -D eslint@8.57.0 @typescript-eslint/eslint-plugin @typescript-eslint/parser && pnpm add -g eslint@8.57.0",
   };
 
   protected commandInstallFormatterLiteral = {
