@@ -76,9 +76,10 @@ export class BaseProject {
         },
     };
     lintStagedConfiguration = `module.exports = {
-    '**/*.{js,jsx,ts,tsx}': ['prettier --write', 'eslint --fix'],
+    '**/*.{js,jsx,ts,tsx}': ['prettier --write'],
     '**/*.{html,css,scss,json}': ['prettier --write'],
-  }`;
+    'src/**/*.{js,jsx,ts,tsx}': ['eslint --fix'],
+  };`;
     commanInstallLinterLiteral = {
         npm: "npm install -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && npm i -g eslint",
         yarn: "yarn add -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && yarn add -g eslint",
