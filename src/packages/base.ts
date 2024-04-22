@@ -97,9 +97,10 @@ export class BaseProject implements BaseProjectI {
   };
 
   protected lintStagedConfiguration = `module.exports = {
-    '**/*.{js,jsx,ts,tsx}': ['prettier --write', 'eslint --fix'],
+    '**/*.{js,jsx,ts,tsx}': ['prettier --write'],
     '**/*.{html,css,scss,json}': ['prettier --write'],
-  }`;
+    'src/**/*.{js,jsx,ts,tsx}': ['eslint --fix'],
+  };`;
 
   protected commanInstallLinterLiteral = {
     npm: "npm install -D eslint@latest @typescript-eslint/eslint-plugin @typescript-eslint/parser && npm i -g eslint",
