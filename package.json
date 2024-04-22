@@ -1,6 +1,6 @@
 {
   "name": "create-salt-project",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "",
   "bin": {
     "create-salt-project": "./dist/src/index.js",
