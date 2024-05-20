@@ -1,6 +1,6 @@
 {
     "name": "create-salt-project",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "",
     "bin": {
         "create-salt-project": "./dist/src/index.js",
@@ -11,7 +11,8 @@
     "scripts": {
         "dev": "rm -rf dist && tsc -w",
         "link-cli": "pnpm link --global && cp package.json dist/package.json",
-        "publish-cli": "pnpm version patch && cp package.json dist/package.json && pnpm publish --access public --no-git-checks"
+        "publish-cli": "pnpm version patch && cp package.json dist/package.json && pnpm publish --access public --no-git-checks",
+        "build": "rm -rf dist && tsc"
     },
     "keywords": [],
     "author": "",

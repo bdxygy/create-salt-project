@@ -331,9 +331,7 @@ export class BaseProject {
         await execCommandOnProject(this.answers)(`${this.commanInstallLinterLiteral[this.answers.packageManager]}`);
         await execWriteFile(this.answers, ".eslintrc.json", JSON.stringify(this.eslintConfiguration));
         await execWriteFile(this.answers, ".lintstagedrc.js", this.lintStagedConfiguration);
-        const packageJson = require(this.answers.CWD +
-            this.answers.projectName +
-            "/package.json");
+        const packageJson = JSON.parse((await execCommandOnProject(this.answers)("cat package.json")));
         packageJson.scripts.lint = "eslint .";
         packageJson.scripts.lintfix = "eslint . --fix";
         await execWriteFile(this.answers, "package.json", JSON.stringify(packageJson));
@@ -344,9 +342,7 @@ export class BaseProject {
         const loadingSpinner = spinner("Creating formatter configuration...\n").start();
         await execCommandOnProject(this.answers)(`${this.commandInstallFormatterLiteral[this.answers.packageManager]}`);
         await execWriteFile(this.answers, ".prettierrc.json", JSON.stringify(this.formatterConfiguration));
-        const packageJson = require(this.answers.CWD +
-            this.answers.projectName +
-            "/package.json");
+        const packageJson = JSON.parse((await execCommandOnProject(this.answers)("cat package.json")));
         packageJson.scripts.format =
             'prettier --write "./**/*.{js,jsx,ts,tsx,css,scss,md,json}" .';
         await execWriteFile(this.answers, "package.json", JSON.stringify(packageJson));
@@ -370,9 +366,8 @@ export class BaseProject {
         }
         const loadingSpinner = spinner("Creating pre-commit configuration\n").start();
         await execCommandOnProject(this.answers)(this.commandsInstallPrecommitLiteral[this.answers.packageManager]);
-        let packageJsonObject = require(this.answers.CWD +
-            this.answers.projectName +
-            "/package.json");
+        let packageJsonString = (await execCommandOnProject(this.answers)("cat package.json"));
+        let packageJsonObject = JSON.parse(packageJsonString);
         if (this.answers.packageManager === "yarn") {
             this.createPostinstallScript(packageJsonObject);
         }
@@ -383,9 +378,8 @@ export class BaseProject {
         await execCommandOnProject(this.answers)(this.commandConfigPrecommitLiteral[this.answers.packageManager]);
         const commitMessage = `echo "\n🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
         await execWriteFile(this.answers, ".husky/pre-commit", commitMessage);
-        packageJsonObject = require(this.answers.CWD +
-            this.answers.projectName +
-            "/package.json");
+        packageJsonString = (await execCommandOnProject(this.answers)("cat package.json"));
+        packageJsonObject = JSON.parse(packageJsonString);
         await this.createSaltPrecommit(this.answers, packageJsonObject);
         await execWriteFile(this.answers, "package.json", JSON.stringify(packageJsonObject));
         loadingSpinner.stop();

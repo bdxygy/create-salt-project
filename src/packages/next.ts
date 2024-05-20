@@ -196,15 +196,15 @@ export class NextProject extends BaseProject {
 
     await execWriteFile(this.answers, "jest.setup.ts", this.jestSetupString);
 
-    // const packageJson = JSON.parse(
-    //   (await execCommandOnProject(this.answers)(
-    //     "cat package.json"
-    //   )) as unknown as string
-    // );
+    const packageJson = JSON.parse(
+      (await execCommandOnProject(this.answers)(
+        "cat package.json"
+      )) as unknown as string
+    );
 
-    const packageJson = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    // const packageJson = require(this.answers.CWD +
+    //   this.answers.projectName +
+    //   "/package.json");
 
     packageJson.scripts = {
       ...packageJson.scripts,

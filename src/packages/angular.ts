@@ -47,15 +47,15 @@ export class AngularProject extends BaseProject {
     ).start();
     await execCommandOnProject(this.answers)(`ng generate config karma`);
 
-    // const packageJson = JSON.parse(
-    //   (await execCommandOnProject(this.answers)(
-    //     "cat package.json"
-    //   )) as unknown as string
-    // );
+    const packageJson = JSON.parse(
+      (await execCommandOnProject(this.answers)(
+        "cat package.json"
+      )) as unknown as string
+    );
 
-    const packageJson = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    // const packageJson = require(this.answers.CWD +
+    //   this.answers.projectName +
+    //   "/package.json");
 
     packageJson.scripts = {
       ...packageJson.scripts,

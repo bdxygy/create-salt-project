@@ -420,15 +420,15 @@ export class BaseProject implements BaseProjectI {
       this.lintStagedConfiguration
     );
 
-    // const packageJson = JSON.parse(
-    //   (await execCommandOnProject(this.answers)(
-    //     "cat package.json"
-    //   )) as unknown as string
-    // );
+    const packageJson = JSON.parse(
+      (await execCommandOnProject(this.answers)(
+        "cat package.json"
+      )) as unknown as string
+    );
 
-    const packageJson = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    // const packageJson = require(this.answers.CWD +
+    //   this.answers.projectName +
+    //   "/package.json");
 
     packageJson.scripts.lint = "eslint .";
     packageJson.scripts.lintfix = "eslint . --fix";
@@ -468,15 +468,15 @@ export class BaseProject implements BaseProjectI {
       JSON.stringify(this.formatterConfiguration)
     );
 
-    // const packageJson = JSON.parse(
-    //   (await execCommandOnProject(this.answers)(
-    //     "cat package.json"
-    //   )) as unknown as string
-    // );
+    const packageJson = JSON.parse(
+      (await execCommandOnProject(this.answers)(
+        "cat package.json"
+      )) as unknown as string
+    );
 
-    const packageJson = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    // const packageJson = require(this.answers.CWD +
+    //   this.answers.projectName +
+    //   "/package.json");
 
     packageJson.scripts.format =
       'prettier --write "./**/*.{js,jsx,ts,tsx,css,scss,md,json}" .';
@@ -551,15 +551,15 @@ export class BaseProject implements BaseProjectI {
       this.commandsInstallPrecommitLiteral[this.answers.packageManager]
     );
 
-    // let packageJsonString: string = (await execCommandOnProject(this.answers)(
-    //   "cat package.json"
-    // )) as unknown as string;
+    let packageJsonString: string = (await execCommandOnProject(this.answers)(
+      "cat package.json"
+    )) as unknown as string;
 
-    // let packageJsonObject = JSON.parse(packageJsonString);
+    let packageJsonObject = JSON.parse(packageJsonString);
 
-    let packageJsonObject = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    // let packageJsonObject = require(this.answers.CWD +
+    //   this.answers.projectName +
+    //   "/package.json");
 
     if (this.answers.packageManager === "yarn") {
       this.createPostinstallScript(packageJsonObject);
@@ -589,13 +589,11 @@ export class BaseProject implements BaseProjectI {
 
     await execWriteFile(this.answers, ".husky/pre-commit", commitMessage);
 
-    // packageJsonString = (await execCommandOnProject(this.answers)(
-    //   "cat package.json"
-    // )) as unknown as string;
+    packageJsonString = (await execCommandOnProject(this.answers)(
+      "cat package.json"
+    )) as unknown as string;
 
-    packageJsonObject = require(this.answers.CWD +
-      this.answers.projectName +
-      "/package.json");
+    packageJsonObject = JSON.parse(packageJsonString);
 
     await this.createSaltPrecommit(this.answers, packageJsonObject);
 
