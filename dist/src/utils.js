@@ -1,5 +1,6 @@
 import { exec } from "child_process";
 import ora from "ora";
+import { writeFileSync } from "fs";
 export const log = console.log;
 export const projectOptions = [
     "next.js",
@@ -30,4 +31,9 @@ export const commandInstallPackageLiteral = {
     pnpm: "pnpm add",
     npm: "npm install",
     yarn: "yarn add",
+};
+export const execWriteFile = async (answer, fileName, value) => {
+    await writeFileSync(`${answer.CWD}/${fileName}`, value, {
+        encoding: "utf-8",
+    });
 };

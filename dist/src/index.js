@@ -13,6 +13,7 @@ figlet("Hello Salters!", async (err, data) => {
     log(`${chalk.bold.cyan(data)} V${packageJson.version}\n`);
     let project;
     const answers = await inquirer.prompt(questions);
+    answers.CWD = process.cwd();
     if (answers.projectFramework === "next.js") {
         project = new NextProject(answers);
     }

@@ -1,4 +1,4 @@
-import { execCommand, execCommandOnProject, log, spinner } from "../utils.js";
+import { execCommand, execCommandOnProject, execWriteFile, log, spinner, } from "../utils.js";
 import { BaseProject } from "./base.js";
 export class NextProject extends BaseProject {
     answers;
@@ -82,19 +82,19 @@ export class NextProject extends BaseProject {
         await execCommand(commandString);
         await execCommandOnProject(this.answers)(`mv ./src/styles/globals.css ./src/styles/globals.scss`);
         await execCommandOnProject(this.answers)(`rm src/styles/Home.module.css`);
-        await execCommandOnProject(this.answers)(`echo "export default function Home() {
-        return (
-          <div className='flex w-screen h-screen items-center justify-center'>
-            <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
-          </div>
-        );
-      }" > src/pages/index.tsx`);
-        await execCommandOnProject(this.answers)(`echo "import '@${this.answers.projectName}/styles/globals.scss';
-      import type { AppProps } from 'next/app';
-      
-      export default function App({ Component, pageProps }: AppProps) {
-        return <Component {...pageProps} />;
-      }" > src/pages/_app.tsx`);
+        await execWriteFile(this.answers, "src/pages/index.tsx", `export default function Home() {
+      return (
+        <div className='flex w-screen h-screen items-center justify-center'>
+          <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
+        </div>
+      );
+    }`);
+        await execWriteFile(this.answers, "src/pages/_app.tsx", `import '@${this.answers.projectName}/styles/globals.scss';
+    import type { AppProps } from 'next/app';
+    
+    export default function App({ Component, pageProps }: AppProps) {
+      return <Component {...pageProps} />;
+    }`);
         await execCommandOnProject(this.answers)(`${this.commandInstallScssLiteral[this.answers.packageManager]}`);
         loadingSpinner.stop();
         log("✔ Project created successfully!");
@@ -102,15 +102,15 @@ export class NextProject extends BaseProject {
     async createTesting() {
         const loadingSpinner = spinner("Creating testing configuration...\n").start();
         await execCommandOnProject(this.answers)(`${this.commandInstalTestingLiteral[this.answers.packageManager]}`);
-        await execCommandOnProject(this.answers)(`echo "${this.jestConfigFnString(this.answers)}" > jest.config.ts`);
-        await execCommandOnProject(this.answers)(`echo "${this.jestSetupString}" > jest.setup.ts`);
-        const packageJson = JSON.parse((await execCommandOnProject(this.answers)("cat package.json")));
+        await execWriteFile(this.answers, "jest.config.ts", this.jestConfigFnString(this.answers));
+        await execWriteFile(this.answers, "jest.setup.ts", this.jestSetupString);
+        const packageJson = require(this.answers.CWD + "/package.json");
         packageJson.scripts = {
             ...packageJson.scripts,
             test: "jest --watch",
             testonpipeline: "jest",
         };
-        await execCommandOnProject(this.answers)(`echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`);
+        await execWriteFile(this.answers, "package.json", JSON.stringify(packageJson));
         loadingSpinner.stop();
         log("✔ Testing configuration created successfully!");
     }
