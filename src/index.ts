@@ -25,6 +25,7 @@ figlet("Hello Salters!", async (err, data) => {
   let project: ProjectRunner;
 
   const answers: TAnswers = await inquirer.prompt(questions);
+  answers.CWD = process.cwd();
 
   if (answers.projectFramework === "next.js") {
     project = new NextProject(answers);

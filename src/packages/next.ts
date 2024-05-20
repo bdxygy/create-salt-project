@@ -1,5 +1,11 @@
 import { TAnswers } from "../types.js";
-import { execCommand, execCommandOnProject, log, spinner } from "../utils.js";
+import {
+  execCommand,
+  execCommandOnProject,
+  execWriteFile,
+  log,
+  spinner,
+} from "../utils.js";
 import { BaseProject } from "./base.js";
 
 export class NextProject extends BaseProject {
@@ -107,27 +113,50 @@ export class NextProject extends BaseProject {
      * Update index.tsx
      */
 
-    await execCommandOnProject(this.answers)(
-      `echo "export default function Home() {
-        return (
-          <div className='flex w-screen h-screen items-center justify-center'>
-            <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
-          </div>
-        );
-      }" > src/pages/index.tsx`
+    // await execCommandOnProject(this.answers)(
+    // `echo "export default function Home() {
+    //   return (
+    //     <div className='flex w-screen h-screen items-center justify-center'>
+    //       <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
+    //     </div>
+    //   );
+    // }" > src/pages/index.tsx`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "src/pages/index.tsx",
+      `export default function Home() {
+      return (
+        <div className='flex w-screen h-screen items-center justify-center'>
+          <h1 className='text-3xl font-bold text-center'>Hello Salters!</h1>
+        </div>
+      );
+    }`
     );
 
     /**
      * Update App.tsx
      */
 
-    await execCommandOnProject(this.answers)(
-      `echo "import '@${this.answers.projectName}/styles/globals.scss';
-      import type { AppProps } from 'next/app';
-      
-      export default function App({ Component, pageProps }: AppProps) {
-        return <Component {...pageProps} />;
-      }" > src/pages/_app.tsx`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "import '@${this.answers.projectName}/styles/globals.scss';
+    //   import type { AppProps } from 'next/app';
+
+    //   export default function App({ Component, pageProps }: AppProps) {
+    //     return <Component {...pageProps} />;
+    //   }" > src/pages/_app.tsx`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "src/pages/_app.tsx",
+      `import '@${this.answers.projectName}/styles/globals.scss';
+    import type { AppProps } from 'next/app';
+    
+    export default function App({ Component, pageProps }: AppProps) {
+      return <Component {...pageProps} />;
+    }`
     );
 
     /**
@@ -151,19 +180,29 @@ export class NextProject extends BaseProject {
       `${this.commandInstalTestingLiteral[this.answers.packageManager]}`
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${this.jestConfigFnString(this.answers)}" > jest.config.ts`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${this.jestConfigFnString(this.answers)}" > jest.config.ts`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "jest.config.ts",
+      this.jestConfigFnString(this.answers)
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${this.jestSetupString}" > jest.setup.ts`
-    );
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${this.jestSetupString}" > jest.setup.ts`
+    // );
 
-    const packageJson = JSON.parse(
-      (await execCommandOnProject(this.answers)(
-        "cat package.json"
-      )) as unknown as string
-    );
+    await execWriteFile(this.answers, "jest.setup.ts", this.jestSetupString);
+
+    // const packageJson = JSON.parse(
+    //   (await execCommandOnProject(this.answers)(
+    //     "cat package.json"
+    //   )) as unknown as string
+    // );
+
+    const packageJson = require(this.answers.CWD + "/package.json");
 
     packageJson.scripts = {
       ...packageJson.scripts,
@@ -171,8 +210,14 @@ export class NextProject extends BaseProject {
       testonpipeline: "jest",
     };
 
-    await execCommandOnProject(this.answers)(
-      `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "package.json",
+      JSON.stringify(packageJson)
     );
 
     loadingSpinner.stop();

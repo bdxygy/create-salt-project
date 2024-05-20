@@ -4,8 +4,10 @@ import {
   commandInstallPackageLiteral,
   commandRun,
   execCommandOnProject,
+  execWriteFile,
   spinner,
 } from "../utils.js";
+import { writeFileSync } from "fs";
 
 export interface BaseProjectI {
   run(): Promise<void>;
@@ -396,27 +398,47 @@ export class BaseProject implements BaseProjectI {
       `${this.commanInstallLinterLiteral[this.answers.packageManager]}`
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${JSON.stringify(
-        JSON.stringify(this.eslintConfiguration)
-      )}" > .eslintrc.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${JSON.stringify(
+    //     JSON.stringify(this.eslintConfiguration)
+    //   )}" > .eslintrc.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      ".eslintrc.json",
+      JSON.stringify(this.eslintConfiguration)
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${this.lintStagedConfiguration}" > .lintstagedrc.js`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${this.lintStagedConfiguration}" > .lintstagedrc.js`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      ".lintstagedrc.js",
+      this.lintStagedConfiguration
     );
 
-    const packageJson = JSON.parse(
-      (await execCommandOnProject(this.answers)(
-        "cat package.json"
-      )) as unknown as string
-    );
+    // const packageJson = JSON.parse(
+    //   (await execCommandOnProject(this.answers)(
+    //     "cat package.json"
+    //   )) as unknown as string
+    // );
+
+    const packageJson = require(this.answers.CWD + "/package.json");
 
     packageJson.scripts.lint = "eslint .";
     packageJson.scripts.lintfix = "eslint . --fix";
 
-    await execCommandOnProject(this.answers)(
-      `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "package.json",
+      JSON.stringify(packageJson)
     );
 
     loadingSpinner.stop();
@@ -432,23 +454,37 @@ export class BaseProject implements BaseProjectI {
       `${this.commandInstallFormatterLiteral[this.answers.packageManager]}`
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${JSON.stringify(
-        JSON.stringify(this.formatterConfiguration)
-      )}" > .prettierrc.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${JSON.stringify(
+    //     JSON.stringify(this.formatterConfiguration)
+    //   )}" > .prettierrc.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      ".prettierrc.json",
+      JSON.stringify(this.formatterConfiguration)
     );
 
-    const packageJson = JSON.parse(
-      (await execCommandOnProject(this.answers)(
-        "cat package.json"
-      )) as unknown as string
-    );
+    // const packageJson = JSON.parse(
+    //   (await execCommandOnProject(this.answers)(
+    //     "cat package.json"
+    //   )) as unknown as string
+    // );
+
+    const packageJson = require(this.answers.CWD + "/package.json");
 
     packageJson.scripts.format =
       'prettier --write "./**/*.{js,jsx,ts,tsx,css,scss,md,json}" .';
 
-    await execCommandOnProject(this.answers)(
-      `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${JSON.stringify(JSON.stringify(packageJson))}" > package.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "package.json",
+      JSON.stringify(packageJson)
     );
 
     loadingSpinner.stop();
@@ -465,12 +501,24 @@ export class BaseProject implements BaseProjectI {
       } && npx tailwindcss init -p`
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${this.tailwindConfigString}" > tailwind.config.js`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${this.tailwindConfigString}" > tailwind.config.js`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "tailwind.config.js",
+      this.tailwindConfigString
     );
 
-    await execCommandOnProject(this.answers)(
-      `echo "${this.tailwindClassCss}" > ${this.fileStylesPath}`
+    // await execCommandOnProject(this.answers)(
+    //   `echo "${this.tailwindClassCss}" > ${this.fileStylesPath}`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      this.fileStylesPath,
+      this.tailwindClassCss
     );
 
     loadingSpinner.stop();
@@ -499,11 +547,13 @@ export class BaseProject implements BaseProjectI {
       this.commandsInstallPrecommitLiteral[this.answers.packageManager]
     );
 
-    let packageJsonString: string = (await execCommandOnProject(this.answers)(
-      "cat package.json"
-    )) as unknown as string;
+    // let packageJsonString: string = (await execCommandOnProject(this.answers)(
+    //   "cat package.json"
+    // )) as unknown as string;
 
-    let packageJsonObject = JSON.parse(packageJsonString);
+    // let packageJsonObject = JSON.parse(packageJsonString);
+
+    let packageJsonObject = require(this.answers.CWD + "/package.json");
 
     if (this.answers.packageManager === "yarn") {
       this.createPostinstallScript(packageJsonObject);
@@ -511,8 +561,14 @@ export class BaseProject implements BaseProjectI {
       this.createPreprareScript(packageJsonObject);
     }
 
-    await execCommandOnProject(this.answers)(
-      `echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "package.json",
+      JSON.stringify(packageJsonObject)
     );
 
     await execCommandOnProject(this.answers)(
@@ -521,20 +577,28 @@ export class BaseProject implements BaseProjectI {
 
     const commitMessage = `echo "\n🛠️ Precommit Running! Please wait..."\nnpx lint-staged`;
 
-    await execCommandOnProject(this.answers)(
-      `echo ${JSON.stringify(commitMessage)} > .husky/pre-commit`
-    );
+    // await execCommandOnProject(this.answers)(
+    //   `echo ${JSON.stringify(commitMessage)} > .husky/pre-commit`
+    // );
 
-    packageJsonString = (await execCommandOnProject(this.answers)(
-      "cat package.json"
-    )) as unknown as string;
+    await execWriteFile(this.answers, ".husky/pre-commit", commitMessage);
 
-    packageJsonObject = JSON.parse(packageJsonString);
+    // packageJsonString = (await execCommandOnProject(this.answers)(
+    //   "cat package.json"
+    // )) as unknown as string;
+
+    packageJsonObject = require(this.answers.CWD + "/package.json");
 
     await this.createSaltPrecommit(this.answers, packageJsonObject);
 
-    await execCommandOnProject(this.answers)(
-      `echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`
+    // await execCommandOnProject(this.answers)(
+    //   `echo ${JSON.stringify(JSON.stringify(packageJsonObject))} > package.json`
+    // );
+
+    await execWriteFile(
+      this.answers,
+      "package.json",
+      JSON.stringify(packageJsonObject)
     );
 
     loadingSpinner.stop();

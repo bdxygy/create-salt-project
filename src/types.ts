@@ -3,4 +3,5 @@ export type TAnswers = {
   projectFramework: "react" | "next.js" | "@angular";
   packageManager: "npm" | "yarn" | "pnpm";
   projectJiraKey: string;
+  CWD: string;
 };
