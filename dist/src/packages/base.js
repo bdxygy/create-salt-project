@@ -27,7 +27,14 @@ export class BaseProject {
         rules: {
             "@typescript-eslint/no-empty-function": "error",
             "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                },
+            ],
             "@typescript-eslint/no-inferrable-types": "off",
             "@typescript-eslint/no-non-null-assertion": "off",
             "@typescript-eslint/ban-types": "off",
@@ -91,7 +98,7 @@ export class BaseProject {
         yarn: "yarn add --dev --exact prettier && yarn add -D @ianvs/prettier-plugin-sort-imports && yarn add -g prettier",
     };
     formatterConfiguration = {
-        trailingComma: "es5",
+        trailingComma: "none",
         tabWidth: 2,
         singleQuote: true,
         semi: true,
