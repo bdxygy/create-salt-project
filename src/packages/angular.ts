@@ -53,7 +53,9 @@ export class AngularProject extends BaseProject {
     //   )) as unknown as string
     // );
 
-    const packageJson = require(this.answers.CWD + "/package.json");
+    const packageJson = require(this.answers.CWD +
+      this.answers.projectName +
+      "/package.json");
 
     packageJson.scripts = {
       ...packageJson.scripts,

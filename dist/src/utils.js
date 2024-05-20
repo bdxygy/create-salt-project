@@ -33,7 +33,7 @@ export const commandInstallPackageLiteral = {
     yarn: "yarn add",
 };
 export const execWriteFile = async (answer, fileName, value) => {
-    await writeFileSync(`${answer.CWD}/${fileName}`, value, {
+    await writeFileSync(`${answer.CWD}/${answer.projectName}/${fileName}`, value, {
         encoding: "utf-8",
     });
 };

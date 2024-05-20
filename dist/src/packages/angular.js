@@ -20,7 +20,9 @@ export class AngularProject extends BaseProject {
     async createTesting() {
         const loadingSpinner = spinner("Creating testing configuration...\n").start();
         await execCommandOnProject(this.answers)(`ng generate config karma`);
-        const packageJson = require(this.answers.CWD + "/package.json");
+        const packageJson = require(this.answers.CWD +
+            this.answers.projectName +
+            "/package.json");
         packageJson.scripts = {
             ...packageJson.scripts,
             test: "ng test --code-coverage --watch",

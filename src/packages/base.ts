@@ -426,7 +426,9 @@ export class BaseProject implements BaseProjectI {
     //   )) as unknown as string
     // );
 
-    const packageJson = require(this.answers.CWD + "/package.json");
+    const packageJson = require(this.answers.CWD +
+      this.answers.projectName +
+      "/package.json");
 
     packageJson.scripts.lint = "eslint .";
     packageJson.scripts.lintfix = "eslint . --fix";
@@ -472,7 +474,9 @@ export class BaseProject implements BaseProjectI {
     //   )) as unknown as string
     // );
 
-    const packageJson = require(this.answers.CWD + "/package.json");
+    const packageJson = require(this.answers.CWD +
+      this.answers.projectName +
+      "/package.json");
 
     packageJson.scripts.format =
       'prettier --write "./**/*.{js,jsx,ts,tsx,css,scss,md,json}" .';
@@ -553,7 +557,9 @@ export class BaseProject implements BaseProjectI {
 
     // let packageJsonObject = JSON.parse(packageJsonString);
 
-    let packageJsonObject = require(this.answers.CWD + "/package.json");
+    let packageJsonObject = require(this.answers.CWD +
+      this.answers.projectName +
+      "/package.json");
 
     if (this.answers.packageManager === "yarn") {
       this.createPostinstallScript(packageJsonObject);
@@ -587,7 +593,9 @@ export class BaseProject implements BaseProjectI {
     //   "cat package.json"
     // )) as unknown as string;
 
-    packageJsonObject = require(this.answers.CWD + "/package.json");
+    packageJsonObject = require(this.answers.CWD +
+      this.answers.projectName +
+      "/package.json");
 
     await this.createSaltPrecommit(this.answers, packageJsonObject);
 

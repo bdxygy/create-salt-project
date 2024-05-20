@@ -104,7 +104,9 @@ export class NextProject extends BaseProject {
         await execCommandOnProject(this.answers)(`${this.commandInstalTestingLiteral[this.answers.packageManager]}`);
         await execWriteFile(this.answers, "jest.config.ts", this.jestConfigFnString(this.answers));
         await execWriteFile(this.answers, "jest.setup.ts", this.jestSetupString);
-        const packageJson = require(this.answers.CWD + "/package.json");
+        const packageJson = require(this.answers.CWD +
+            this.answers.projectName +
+            "/package.json");
         packageJson.scripts = {
             ...packageJson.scripts,
             test: "jest --watch",

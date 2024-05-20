@@ -48,7 +48,11 @@ export const execWriteFile = async (
   fileName: string,
   value: string
 ) => {
-  await writeFileSync(`${answer.CWD}/${fileName}`, value, {
-    encoding: "utf-8",
-  });
+  await writeFileSync(
+    `${answer.CWD}/${answer.projectName}/${fileName}`,
+    value,
+    {
+      encoding: "utf-8",
+    }
+  );
 };
